@@ -1,0 +1,19 @@
+version: '3'
+services: 
+    inventory_service:
+        container_name: inventory_service
+        build: ./inventory_service/
+        env_file:
+            - service.env
+        ports: 
+            - "8000:8000"
+        volumes:
+            - ./inventory_service/:/app
+            - /app/node_modules
+        links:
+            - mongodb
+    mongodb:
+        container_name: mongodb
+        build: ./db
+        ports:
+            - "27017:27017"
