@@ -30,7 +30,7 @@ export async function searchItem(config, req, resp) {
 
 export async function createItem(config, req, resp) {
   if (typeof req.body.name !== 'string') return resp.json({ message: 'NO_ITEM_NAME' });
-  const item = new Item({ name: req.body.name, group: req.group.id });
+  const item = new Item({ name: req.body.name, group: req.group.id, picurl: req.body.picurl});
 
   try {
     await item.save();
@@ -38,7 +38,7 @@ export async function createItem(config, req, resp) {
     return resp.json({ message: 'ERR_SAVE_ITEM' });
   }
 
-  return resp.json({ message: 'OK', ...item });
+  return resp.json({ message: 'OK', item });
 }
 
 export async function addItem(config, req, resp, remove = false) {

@@ -1,4 +1,4 @@
-import sign from 'jsonwebtoken';
+import {sign} from 'jsonwebtoken';
 import { Types } from 'mongoose';
 import { Group } from '../models';
 
@@ -33,6 +33,10 @@ export async function newGroup({ SIGN_KEY, SESSION_KEEP_ALIVE }, req, resp) {
   }
 
   delete user.password;
+  group.users.forEach((u) => {
+    // eslint-disable-next-line no-param-reassign
+    u.password = '';
+  });
 
   return resp.json({
     message: 'OK',
@@ -43,14 +47,17 @@ export async function newGroup({ SIGN_KEY, SESSION_KEEP_ALIVE }, req, resp) {
       userid: user._id,
     },
     SIGN_KEY,
-    { espiresIn: SESSION_KEEP_ALIVE }),
+    { expiresIn: SESSION_KEEP_ALIVE }),
   });
 }
 
 export async function createGroupCode(config, req, resp) {
+  const expireAt = new Date();
+  expireAt.setTime(expireAt.getTime() + 15 * 86400000);
+
   const groupCode = {
     code: Types.ObjectId(),
-    expiresAt: Date.now().add(15).days(),
+    expiresAt: expireAt,
   };
 
   req.group.invite_codes.push(groupCode);
@@ -61,6 +68,14 @@ export async function createGroupCode(config, req, resp) {
     return resp.json({ message: 'FAIL_CREATE_CODE' });
   }
   return resp.json({ message: 'OK', groupCode });
+}
+
+export async function getGroup(config,req,resp){
+  return resp.json({
+    message: 'OK',
+    group: req.group,
+    user: req.user,
+  });
 }
 
 export async function setGroupPic(config, req, resp) {

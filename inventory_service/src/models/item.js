@@ -1,7 +1,6 @@
 import { Schema, model } from 'mongoose';
 
 const schema = new Schema({
-  _id: Schema.Types.ObjectId,
   name: {
     type: String,
     required: true,
@@ -12,6 +11,10 @@ const schema = new Schema({
     where: { type: Schema.ObjectId, ref: 'Location' },
     amount: Number,
   }],
+  picurl: {
+    type: String,
+    default: 'default_group_pic.png',
+  },
   group: {
     type: Schema.Types.ObjectId,
     ref: 'Group',

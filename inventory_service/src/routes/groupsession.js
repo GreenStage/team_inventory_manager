@@ -8,7 +8,9 @@ export default function routes(config) {
   router.use(auth.bind(null, config));
   router.get('/inventory', handlers.listInventory.bind(null, config));
   router.get('/inventory/search', handlers.searchItem.bind(null, config));
-  router.post('/inventory/', handlers.addItem.bind(null, config));
+  router.post('/inventory/add', handlers.addItem.bind(null, config));
+  router.post('/inventory/create', handlers.createItem.bind(null, config));
   router.get('/createcode', handlers.createGroupCode.bind(null, config));
+  router.get('/',handlers.getGroup.bind(null, config));
   return router;
 }

@@ -1,0 +1,64 @@
+@media (min-width: 768px) {
+  .inventory{
+    width:42%;
+  }
+  .inventoryTitle{
+    text-align: left;
+  }
+  .item{
+    margin:0.5em;
+    padding:0.5em;
+    color: #445669;
+    &:hover{
+      border-color:#8096b5;
+      box-shadow: 0 .125rem .25rem RGBA(0,191,255,0.1)!important;
+    }
+    .thumbnail{
+      margin:1.2rem;
+      width:3em;
+    }
+    .itemamount{
+      font-weight: 400;
+      margin-bottom:0;
+    }
+    .buttons{
+      float:right;
+    }
+    .itemProperties{
+      display:inline-block; padding:0;
+      li{
+        display:inline;
+        white-space:nowrap;
+        &:after{
+          color:#bfd0da;
+          padding-left:0.1em;
+          padding-right:0.2em;
+          content: " \00b7";
+        }
+        &:last-child{
+          &:after{
+            content:none;
+          }
+        }
+      }
+    }
+    .itemlocations{
+      margin-left:-15px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .expandcontainer{
+      display: flex;
+      align-items: center;
+      float:right;
+      .expandicon{
+        cursor: pointer;
+        transition: color 0.5s ease;
+      }
+      .expandicon:hover{
+        color:blue;
+      }
+    }
+  }
+}

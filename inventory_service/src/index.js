@@ -33,6 +33,7 @@ mongoose.connect(options.MONGO_URL)
     });
 
     app.use((err, req, resp, next) => {
+      console.log(err)
       if (err.name === 'UnauthorizedError') {
         return resp.status(401).json({ message: 'INVALID_TOKEN' });
       }

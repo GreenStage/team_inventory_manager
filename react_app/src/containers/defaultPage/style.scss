@@ -1,0 +1,35 @@
+.enter{
+  h3,h2{
+    text-align: center;
+  }
+  .logo{
+    width:90%;
+    float:right;
+    margin-top:-0.35em;
+    outline: 20px solid #37CCA2;
+    outline-offset: -10px;
+  }
+
+  $textNoBgColor: #f7f6f6;
+
+  .selectForm{
+    width:100%;
+    .selectFormOption{
+      cursor:pointer;
+      text-align: right;
+      font-size:1.1em;
+      &:hover {
+        color:black;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .logintab{
+
+    .signInBtn{
+      width:100%;
+    }
+  }
+}
+

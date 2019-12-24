@@ -1,4 +1,4 @@
-import sign from 'jsonwebtoken';
+import { sign } from 'jsonwebtoken';
 import { Group } from '../models';
 
 const MIN_USERNAME = 4;
@@ -17,8 +17,8 @@ export async function signup({ SIGN_KEY, SESSION_KEEP_ALIVE }, req, resp) {
   if (typeof req.body.code !== 'string') return resp.json({ message: 'NO_CODE' });
 
   try {
-    group = await Group.findOne({ 'invite_codes._id': req.body.code });
-    invite = group.invite_codes.id(req.query.code);
+    group = await Group.findOne({ 'invite_codes.code': req.body.code });
+    invite = group.invite_codes.find((iv) => iv.code.toString() === req.body.code);
   } catch (err) {
     return resp.status(400).json({ message: 'CODE_NOT_FOUND' });
   }
@@ -45,8 +45,11 @@ export async function signup({ SIGN_KEY, SESSION_KEEP_ALIVE }, req, resp) {
     return resp.status(400).json({ message: 'SERVER_ERROR' });
   }
 
-  const usersNoPw = group.users.map(({ password, ...others }) => others);
-  group.users = usersNoPw;
+  delete user.password;
+  group.users.forEach((u) => {
+    // eslint-disable-next-line no-param-reassign
+    u.password = '';
+  });
 
   return resp.json({
     message: 'OK',
@@ -57,7 +60,7 @@ export async function signup({ SIGN_KEY, SESSION_KEEP_ALIVE }, req, resp) {
       userid: user._id,
     },
     SIGN_KEY,
-    { espiresIn: SESSION_KEEP_ALIVE }),
+    { expiresIn: SESSION_KEEP_ALIVE }),
   });
 }
 
@@ -80,8 +83,11 @@ export async function signin({ SIGN_KEY, SESSION_KEEP_ALIVE }, req, resp) {
     return resp.status(400).json({ message: 'WRONG_USER_PASS' });
   }
 
-  const usersNoPw = group.users.map(({ password, ...others }) => others);
-  group.users = usersNoPw;
+  delete user.password;
+  group.users.forEach((u) => {
+    // eslint-disable-next-line no-param-reassign
+    u.password = '';
+  });
 
   return resp.json({
     message: 'OK',
@@ -92,6 +98,6 @@ export async function signin({ SIGN_KEY, SESSION_KEEP_ALIVE }, req, resp) {
       userid: user._id,
     },
     SIGN_KEY,
-    { espiresIn: SESSION_KEEP_ALIVE }),
+    { expiresIn: SESSION_KEEP_ALIVE }),
   });
 }

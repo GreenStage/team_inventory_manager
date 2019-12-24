@@ -10,4 +10,4 @@ RUN npm set progress=false \
     && npm install --save-dev @babel/core @babel/cli @babel/preset-env @babel/node -q \
     && npm install
 
-CMD nodemon --watch -L src --exec npm run start
+CMD nodemon --legacy-watch -w src --exec npm run start
