@@ -31,12 +31,6 @@ export default async function auth({ SIGN_KEY }, req, resp, next) {
 
     if (!user) return resp.status(404).json({ message: 'USER_NOT_FOUND' });
     
-    delete user.password;
-    group.users.forEach((u) => {
-      // eslint-disable-next-line no-param-reassign
-      u.password = '';
-    });
-
     req.group = group;
     req.user = user;
     return next();

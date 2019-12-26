@@ -5,6 +5,7 @@ import group from './group';
 import session from './session';
 import error from './error';
 import inventory from './inventory';
+import selectedItem from './selectedItem';
 
 export default combineReducers({
   user,
@@ -13,4 +14,5 @@ export default combineReducers({
   session,
   error,
   inventory,
+  selectedItem,
 });

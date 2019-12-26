@@ -44,3 +44,62 @@ h3,h2{
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
+
+@media (min-width: 768px) {
+  .sectionTitle{
+    text-align: left;
+    margin-left:0.5em;
+    margin-right:0.5em;
+    color:#414650;
+  }
+  .sectionSubtitle{
+    margin-top:2em;
+    margin-bottom:1.5em;
+    .sortTitle{
+      color:#a0a8b1;
+      font-weight: 400;
+      margin:0;
+      padding-top:0.25em;
+    }
+  }
+}
+.navbar{
+  .menuHeader{
+    text-align: center;
+  }
+}
+.navtop{
+  background-color: #5e81eb;
+  position:absolute;
+  width:100%;
+}
+.contentPage{
+  position:absolute;
+  overflow: hidden;
+  height:100%;
+  width:100%;
+}
+.colLeft,.colMid,.colRight{
+  padding-top:2em;
+  margin-top:3.7em;
+}
+.colRight{
+  background-color:#fafcfe;
+  border-left:#dbdbdb 1px solid;
+}
+.formsubmitbtn{
+  width:100%;
+}
+.thumbnail_item_big{
+  width:4em;
+  height:auto;
+  text-align: center;
+  vertical-align: middle;
+}
+.sectionSubtitle{}
+
+
+
+.thumb{
+  width:100%;
+}

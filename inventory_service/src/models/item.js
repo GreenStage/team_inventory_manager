@@ -4,6 +4,10 @@ const schema = new Schema({
   name: {
     type: String,
     required: true,
+  },
+  namelower:{
+	type: String,
+    required: true,
     index: { unique: true },
   },
   amount: Number,
@@ -22,4 +26,11 @@ const schema = new Schema({
   },
 }, { timestamps: true });
 
+function setLowerName(next){
+  this.namelower = this.name.toLowerCase();
+  next();
+}
+
+schema.pre('updateOne', setLowerName);
+schema.pre('save', setLowerName);
 export default model('Item', schema);

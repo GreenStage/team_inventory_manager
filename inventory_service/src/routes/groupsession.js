@@ -11,6 +11,10 @@ export default function routes(config) {
   router.post('/inventory/add', handlers.addItem.bind(null, config));
   router.post('/inventory/create', handlers.createItem.bind(null, config));
   router.get('/createcode', handlers.createGroupCode.bind(null, config));
+
+  router.post('/locations', handlers.addLocation.bind(null, config));
+  router.get('/locations', handlers.listLocations.bind(null, config));
+
   router.get('/',handlers.getGroup.bind(null, config));
   return router;
 }

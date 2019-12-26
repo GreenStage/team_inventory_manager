@@ -1,8 +1,9 @@
 import React from 'react';
-import { Navbar } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { PIC_ENDOINT } from '../../connector';
 import Inventory from '../inventory';
+import AddLocation from '../addlocation';
+import ManageItem from '../manageItem';
 
 export default function GroupWindow() {
   const user = useSelector((state) => state.user);
@@ -11,20 +12,30 @@ export default function GroupWindow() {
 
   return (
     <div>
-      <Navbar bg="dark" variant="dark">
-        <Navbar.Brand href="#home">
+      <nav className="navbar navbar-dark navtop">
+        <span className="col-sm-2 navbar-brand mb-0 h2 menuHeader">
           <img
             alt=""
             src={PIC_ENDOINT(group.picurl)}
             width="30"
             height="30"
-            className="d-inline-block align-top"
+            className="d-inline-block align-center"
           />
           {' '}
           {group.name}
-        </Navbar.Brand>
-      </Navbar>
-      <Inventory groupname={group.name} token={session.token} />
+        </span>
+      </nav>
+      <div className="container-fluid">
+        <div className="row contentPage">
+          <div className="col-sm-2 colLeft" />
+          <div className="col-sm-5 colMid">
+            <Inventory groupname={group.name} token={session.token} />
+          </div>
+          <div className="col-sm-5 colRight">
+            <ManageItem/>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

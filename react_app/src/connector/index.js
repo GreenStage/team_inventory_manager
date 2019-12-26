@@ -18,8 +18,10 @@ export async function post(endpoint, body = {}, headers = {}) {
 }
 
 export async function get(endpoint, params = {}, headers = {}) {
-  const composedUrl = Object.keys(params)
-    .reduce((url, key) => url.append(key, params[key]), new URL(endpoint));
+  const params1 = Object.keys(params).map((k) => `${k}=${params[k]}`);
+  const paramsStr = params1.join('&');
+  const composedUrl = `${endpoint}?${paramsStr}`;
+
   const resp = await fetch(composedUrl, {
     method: 'GET',
     headers: {

@@ -18,15 +18,15 @@ export default function EnterForm({ fields, submit, validated }) {
   ));
 
   return (
-    <div className="logintab">
+    <div className="formtab">
       <Form
         noValidate
         validated={validated}
         onSubmit={(e) => submit.handle(e, values)}
-        className="loginForm"
+        className="formCustom"
       >
         {fieldsJsx}
-        <Button className="signInBtn" variant="dark" type="submit">
+        <Button className="formsubmitbtn" style={submit.style || {}} variant="dark" type="submit">
           {submit.value}
         </Button>
       </Form>
@@ -44,6 +44,7 @@ EnterForm.propTypes = {
   submit: PropTypes.shape({
     value: PropTypes.string.isRequired,
     handle: PropTypes.func.isRequired,
+    style: PropTypes.shape({}),
   }).isRequired,
   validated: PropTypes.bool.isRequired,
 };

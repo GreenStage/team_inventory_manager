@@ -5,11 +5,13 @@ const schema = new Schema({
     type: String,
     required: true,
   },
+  namelower:{
+    type: String,
+    required:true
+  },
   address: {
     type: String,
-    required: true,
   },
 });
-
 
 export { schema as default };
