@@ -1,36 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, Button } from 'react-bootstrap';
+import { TextField, Button } from '@material-ui/core';
 
 const values = {};
 
 export default function EnterForm({ fields, submit, validated }) {
   const fieldsJsx = fields.map((field) => (
-    <Form.Group controlId={field.id} key={field.id}>
-      <Form.Label>{field.name}</Form.Label>
-      <Form.Control
-        required
-        type={field.type || 'text'}
-        placeholder={field.placeholder}
-        onChange={(e) => { values[field.id] = e.target.value; }}
-      />
-    </Form.Group>
+    <TextField
+      key={field.name}
+      label={field.name}
+      type={field.type || 'text'}
+      variant="outlined"
+      margin="normal"
+      required
+      fullWidth
+      InputProps={{
+        endAdornment: field.endAdornment,
+      }}
+      onChange={(e) => { values[field.id] = e.target.value; }}
+    />
+
   ));
 
   return (
-    <div className="formtab">
-      <Form
-        noValidate
-        validated={validated}
-        onSubmit={(e) => submit.handle(e, values)}
-        className="formCustom"
+    <form
+      noValidate
+      validated={validated}
+      onSubmit={(e) => submit.handle(e, values)}
+    >
+      {fieldsJsx}
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        fullWidth
       >
-        {fieldsJsx}
-        <Button className="formsubmitbtn" style={submit.style || {}} variant="dark" type="submit">
-          {submit.value}
-        </Button>
-      </Form>
-    </div>
+        {submit.value}
+      </Button>
+    </form>
   );
 }
 

@@ -5,7 +5,7 @@
     padding:0em;
     color: #445669;
     &:hover{
-      border-color:#06A8FF;
+      border-color:#1976D2;
       box-shadow: 0 .125rem .25rem RGBA(0,191,255,0.1)!important;
     }
     
@@ -73,7 +73,6 @@
 .arrow {
   cursor: pointer;
   height: 2em;
-  left: 50%;
   position: absolute;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
@@ -92,7 +91,7 @@
     width: 100%;
     
     &:after {
-      background-color: #06A8FF;
+      background-color: #1976D2;
       content: '';
       height: 100%;
       position: absolute;
@@ -136,9 +135,19 @@
     }
   }
   
-  &:active {
-    transform: translateX(-50%) translateY(-50%) scale(0.9);
+  .arrowa & {
+    
+    &-top:after {
+      left: 0;
+      transition-delay: $transition-time;
+    }
+
+    &-bottom:after {
+      right: 0;
+      transition-delay: 0s;
+    }
   }
+
 }
 .thumbnail{
   margin:1em;

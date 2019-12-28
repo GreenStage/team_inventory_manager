@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col } from 'react-bootstrap';
+import { Grid, Container, Button } from '@material-ui/core';
 import Signin from './signin';
 import Signup from './signup';
 import Newgroup from './newgroup';
@@ -13,9 +13,9 @@ export default function DefaultPage() {
 
   function renderState() {
     const options = [
-      <Col key="signinOpt" onClick={() => setPage('SIGN_IN')} className="selectFormOption">Sign In</Col>,
-      <Col key="signupOpt" onClick={() => setPage('SIGN_UP')} className="selectFormOption">Sign Up</Col>,
-      <Col key="newGroupOpt" onClick={() => setPage('NEW_GROUP')} className="selectFormOption">Create Group</Col>,
+      <Button fullWidth key="signinOpt" onClick={() => setPage('SIGN_IN')} className="selectFormOption">Sign In</Button>,
+      <Button fullWidth key="signupOpt" onClick={() => setPage('SIGN_UP')} className="selectFormOption">Sign Up</Button>,
+      <Button fullWidth key="newGroupOpt" onClick={() => setPage('NEW_GROUP')} className="selectFormOption">Create Group</Button>,
     ];
 
     switch (page) {
@@ -29,17 +29,19 @@ export default function DefaultPage() {
 
   return (
     <div className="enter">
-      <Row>
-        <Col sm={8}>
-          <img className="logo" alt="logo" src="img/logo.svg" />
-          <Row className="selectForm">
-            {[<Col key="dummycol" sm={3} />, renderS[0], renderS[1]]}
-          </Row>
-        </Col>
-        <Col>
+      <Container maxWidth="xs">
+        <Grid container direction="column" alignContent="center" justify="center">
           {renderS[2]}
-        </Col>
-      </Row>
+          <Grid container alignItems="center" justify="center">
+            <Grid item xs={4}>
+              {renderS[0]}
+            </Grid>
+            <Grid item xs={4}>
+              {renderS[1]}
+            </Grid>
+          </Grid>
+        </Grid>
+      </Container>
     </div>
   );
 }

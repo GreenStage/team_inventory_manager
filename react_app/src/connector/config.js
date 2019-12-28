@@ -6,3 +6,4 @@ export const NEWGROUP_ENDPOINT = `${BASE_SERVER}/newgroup`;
 export const PIC_ENDOINT = (picurl) => `${BASE_SERVER}/pics/${picurl}`;
 export const INVENTORY_ENDPOINT = (groupname) => `${GROUP_ENDPOINT(groupname)}/inventory`;
 export const INVENTORY_SEARCH = (groupname) => `${INVENTORY_ENDPOINT(groupname)}/search`;
+export const ADD_ITEM = (groupname) => `${INVENTORY_ENDPOINT(groupname)}/add`;

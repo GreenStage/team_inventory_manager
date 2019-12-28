@@ -20,6 +20,7 @@ export default async function auth({ SIGN_KEY }, req, resp, next) {
     try {
       group = await Group.findById(req.token.groupid);
     } catch (err) {
+      console.log(req.token);
       return resp.json({ message: 'GROUP_NOT_FOUND' });
     }
 
@@ -27,7 +28,7 @@ export default async function auth({ SIGN_KEY }, req, resp, next) {
       return resp.status(401).json({ message: 'NOT_AUTHORIZED' });
     }
 
-    const user = group.users.filter((u) => u._id === req.token.userid);
+    const user = group.users.find((u) => u._id.toString() === req.token.userid);
 
     if (!user) return resp.status(404).json({ message: 'USER_NOT_FOUND' });
     

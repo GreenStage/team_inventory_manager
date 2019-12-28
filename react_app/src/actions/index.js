@@ -44,3 +44,4 @@ export function restoreSession({ groupname, token }) {
 }
 
 export * from './inventory';
+export * from './manageItem';

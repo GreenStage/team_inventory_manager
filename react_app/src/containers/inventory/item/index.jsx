@@ -1,35 +1,45 @@
 /* eslint-disable no-underscore-dangle */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import ItemInner from '../../../components/item';
 import { selectItem } from '../../../actions/inventory';
 
-export default function Item({ style, data }) {
+export default function Item({ style, id }) {
   const [hover, setHover] = useState(false);
+
   const dispatch = useDispatch();
-  const selectedItem = useSelector((state) => state.selectedItem);
+  const item = useSelector((state) => {
+    return state.inventory.items.byId[id];
+  });
+  const isSelected = useSelector((state) => state.selectedItemId === id);
 
   function getTotalAmount() {
-    const arr = data.storedAt || [];
-    return arr.reduce((sum, loc) => sum + loc, 0);
+    const arr = item.storedAt || [];
+    return arr.reduce((sum, loc) => sum + loc.amount, 0);
   }
 
   const setStyle = { ...style };
-  if (selectedItem._id === data._id) {
+  if (isSelected) {
     setStyle.pointerEvents = 'none';
   }
 
   return (
     <div style={setStyle}>
       <div
+        onActive
         onFocus={() => setHover(true)}
         onBlur={() => setHover(false)}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
-        <ItemInner onClick={() => dispatch(selectItem(data))} item={data} hover={hover} amount={getTotalAmount()} />
+        <ItemInner
+          onClick={() => dispatch(selectItem(item))}
+          item={item}
+          hover={hover}
+          active={isSelected}
+          amount={getTotalAmount()}
+        />
       </div>
     </div>
   );
@@ -37,15 +47,7 @@ export default function Item({ style, data }) {
 
 Item.propTypes = {
   style: PropTypes.shape({}),
-  data: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    picurl: PropTypes.string.isRequired,
-    storedAt: PropTypes.arrayOf(PropTypes.shape({
-      where: PropTypes.string.isRequired,
-      amount: PropTypes.number.isRequired,
-    })).isRequired,
-  }).isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 Item.defaultProps = {

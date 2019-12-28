@@ -1,63 +1,67 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import {
+  Container, Grid, CircularProgress, Typography, Hidden, List, ListItem,
+} from '@material-ui/core';
+import SearchBar from 'material-ui-search-bar';
 import { useSelector, useDispatch } from 'react-redux';
-import { Container } from 'react-bootstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import SearchBar from '../../components/searchbar';
+
 import { loadInventory, searchInventory } from '../../actions';
 
 import Item from './item';
 import './style.scss';
 
+
 let typingTimer;
 export default function Inventory({ groupname, token }) {
-  const inventory = useSelector((state) => state.inventory);
+  const inventoryStatus = useSelector((state) => state.inventory.status);
+  const itemIds = useSelector((state) => state.inventory.items.allIds);
+
   const dispatch = useDispatch();
+  const [searchValue, setSearchValue] = useState(null);
 
   React.useEffect(() => {
-    if (inventory.status === 'INVENTORY_UNLOADED') {
+    if (inventoryStatus === 'INVENTORY_UNLOADED') {
       dispatch(loadInventory({ groupname, token }));
     }
   });
 
   let itemsJsx = '';
   let retJsx = '';
-
-  switch (inventory.status) {
+  switch (inventoryStatus) {
     case 'INVENTORY_LOADED':
-      itemsJsx = inventory.items.map((item, index) => (
+      itemsJsx = itemIds.map((id, index) => (
         <CSSTransition
-          key={item._id}
+          key={id}
           timeout={5000}
           appear
           classNames="itemOnList"
         >
-          <Item style={{ transitionDelay: `${index * 0.1}s` }} data={item} />
+          <ListItem style={{ transitionDelay: `${index * 0.1}s`, paddingLeft: 0, paddingRight: 0 }}>
+            <Item id={id} style={{ width: '100%' }} />
+          </ListItem>
         </CSSTransition>
       ));
       retJsx = (
-        <TransitionGroup className="itemsWrapper">
-          {itemsJsx}
-        </TransitionGroup>
+        <List  style={{paddingTop:"1.3em"}}>
+          <TransitionGroup className="itemsWrapper">
+            {itemsJsx}
+          </TransitionGroup>
+        </List>
       );
       break;
     default:
-      retJsx = (
-        <div className="d-flex justify-content-center">
-          <div className="spinner-grow text-primary" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        </div>
-      );
+      retJsx = (<Grid container justify="center"><CircularProgress style={{ marginTop: '3em' }} /></Grid>);
   }
 
   function search(value) {
     dispatch(searchInventory({ groupname, token }, value));
   }
 
-  function onChangeSearch(e) {
+  function onChangeSearch(value) {
+    setSearchValue(value);
     clearTimeout(typingTimer);
-    const { value } = e.target;
     typingTimer = setTimeout(() => {
       if (value) {
         search(value);
@@ -68,17 +72,27 @@ export default function Inventory({ groupname, token }) {
   }
 
   return (
-    <Container fluid className="inventory">
-      <div className="sectionTitle">
-        <h4>Inventory</h4>
-        <div className="row sectionSubtitle">
-          <h5 className="sortTitle align-middle col-sm-6">Recently Updated</h5>
+    <Container>
+      <Typography variant="h4" style={{paddingTop:"0.3em"}}>
+        Inventory
+      </Typography>
+      <Grid container  style={{paddingTop:"1.8em"}}>
+        <Hidden xsDown>
+          <Grid item sm={6}>
+            <Typography variant="h5" style={{paddingTop:"0.3em"}}>
+              Recently Updated
+            </Typography>
+          </Grid>
+        </Hidden>
+        <Grid item sm={6}>
           <SearchBar
-            className="searchInInventory col-sm-6"
-            onChange={(e) => onChangeSearch(e)}
+            value={searchValue}
+            onChange={(v) => onChangeSearch(v)}
+            onRequestSearch={() => {}}
           />
-        </div>
-      </div>
+        </Grid>
+      </Grid>
+
       {retJsx}
     </Container>
   );

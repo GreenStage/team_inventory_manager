@@ -1,9 +1,13 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { InputAdornment, IconButton } from '@material-ui/core';
 import EnterForm from '../../components/enterForm';
 import { signup } from '../../actions';
 
 export default function Signup() {
+  const [showPassword, setShowPassword] = React.useState(false);
   const [validated, setValidated] = React.useState(false);
   const dispatch = useDispatch();
 
@@ -35,7 +39,19 @@ export default function Signup() {
           name: 'Password',
           placeholder: 'Your password here',
           warning: 'Invalid password',
-          type: 'password',
+          type: showPassword ? 'text' : 'password',
+          endAdornment: (
+            <InputAdornment>
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={() => setShowPassword(!showPassword)}
+                onMouseDown={(e) => e.preventDefault()}
+                edge="end"
+              >
+                {showPassword ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
+            </InputAdornment>
+          ),
         },
       ]}
       submit={{

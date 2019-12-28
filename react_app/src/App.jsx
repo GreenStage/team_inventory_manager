@@ -1,11 +1,43 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Container, Grid } from '@material-ui/core';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import DefaultPage from './containers/defaultPage';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 import { restoreSession } from './actions';
 import GroupWindow from './containers/groupWindow';
 
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#1976d2',
+    },
+    text: {
+      primary: '#424851',
+      secondary: '#a4abb4',
+    },
+  },
+  typography: {
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    h4: {
+      color: '#424851',
+    },
+    h5: {
+      color: '#a4abb4',
+    },
+  },
+});
 
 export default function App() {
   const session = useSelector((state) => state.session);
@@ -23,7 +55,7 @@ export default function App() {
     switch (status) {
       case 'SESSION_LOADED': return <GroupWindow />;
       case 'IDLE':
-        return <div className="enterWrapper"><DefaultPage /></div>;
+        return <DefaultPage />;
       default:
         return (
           <div className="d-flex justify-content-center">
@@ -36,8 +68,10 @@ export default function App() {
   }
 
   return (
-    <div className="App">
-      {decideRender()}
-    </div>
+    <ThemeProvider theme={theme}>
+      <Grid container justify="center" alignItems="flex-start" style={{ height: '100%' }}>
+        {decideRender()}
+      </Grid>
+    </ThemeProvider>
   );
 }

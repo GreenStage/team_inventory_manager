@@ -1,49 +1,91 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { } from 'react-bootstrap';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
+import {
+  Card, Grid, CardActionArea, Container, Typography, CardContent, Hidden, CardMedia, Avatar,
+} from '@material-ui/core';
 import { PIC_ENDOINT } from '../connector';
 
 TimeAgo.addLocale(en);
 const timeAgo = new TimeAgo('en-US');
 
+function getItemThumbnail(itemname, picurl) {
+  if (picurl === 'default_group_pic.png') {
+    const letters = itemname.split(' ')
+      .filter((v, i) => i < 2)
+      .map((name) => name.charAt(0).toUpperCase());
+    return (
+      <Avatar
+        style={{ width: '100%', height: '100%' }}
+        variant="square"
+      >
+        { letters }
+      </Avatar>
+    );
+  }
+  return (
+    <Avatar
+      style={{ width: '100%', height: '100%' }}
+      variant="square"
+      alt={itemname}
+      src={PIC_ENDOINT(picurl)}
+    />
+  );
+}
+
 export default function Item({
-  item, amount, hover, onClick,
+  item, amount, hover, active, onClick,
 }) {
+  let arrowClass = 'arrow';
+  if (active) arrowClass = 'arrow arrowa';
+  else if (hover) arrowClass = 'arrow arrowh';
+
   const date = new Date(item.updatedAt);
   const dateStr = timeAgo.format(date, 'twitter') || 'Just now';
 
   return (
-    <div className="item card shadow-sm slideInDown" role="button" tabIndex={0} onClick={onClick} onKeyDown={onClick}>
-      <div className="row no-gutters">
-        <div className="col-md-2">
-          <img className="thumbnail card-img" src={PIC_ENDOINT(item.picurl)} alt={item.name} />
-        </div>
-        <div className="col-md-7">
-          <div className="card-body">
-            <div className="row">
-              <h6 className="row-md-12">{item.name}</h6>
-            </div>
-            <div className="row itemProperties">
-              <li className=" itemamount">
-                { amount }
-                {' '}
-                items
-              </li>
-              <li>{dateStr}</li>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-3 expandcontainer">
-          <div className={hover? "arrow arrowh" : "arrow"}>
-            <div className="arrow-top" />
-            <div className="arrow-bottom" />
-          </div>
-        </div>
-
-      </div>
-    </div>
+    <Card onClick={((e) => onClick(e))}>
+      <CardActionArea>
+        <Grid container justify="flex-start">
+          <Grid item xs={3} sm={2}>
+            <CardMedia
+              style={{ backgroundColor: '#F5F5F5', height: '100%' }}
+              title={item.name}
+            >
+              {getItemThumbnail(item.name, item.picurl)}
+            </CardMedia>
+          </Grid>
+          <Grid item xs={9} sm={7}>
+            <CardContent style={{ paddingTop: '15px', paddingBottom: '15px' }}>
+              <Typography gutterBottom variant="h6" component="h2">
+                {item.name}
+              </Typography>
+              <Grid container justify="flex-start" alignItems="center">
+                <Typography variant="body2" color="textSecondary" component="p">
+                  { amount }
+                  {' '}
+                  items
+                </Typography>
+                <Typography variant="body2" color="textSecondary" style={{ paddingLeft: '10px' }} component="p">
+                  {dateStr}
+                </Typography>
+              </Grid>
+            </CardContent>
+          </Grid>
+          <Hidden xsDown>
+            <Grid item sm={3}>
+              <Grid container justify="flex-end">
+                <div className={arrowClass}>
+                  <div className="arrow-top" />
+                  <div className="arrow-bottom" />
+                </div>
+              </Grid>
+            </Grid>
+          </Hidden>
+        </Grid>
+      </CardActionArea>
+    </Card>
   );
 }
 

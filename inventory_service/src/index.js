@@ -12,7 +12,7 @@ const PORT = 8000;
 const options = {
   PORT: process.env.PORT || 8000,
   SIGN_KEY: process.env.SIGN_KEY || 'SHOULD_DEFINE_ENV_SIGN_KEY',
-  SESSION_KEEP_ALIVE: process.env.SESSION_KEEP_ALIVE || '1d',
+  SESSION_KEEP_ALIVE: process.env.SESSION_KEEP_ALIVE || '10d',
   MONGO_URL: process.env.MONGO_URL || 'SHOULD_DEFINE_ENV_MONGO_URL',
   key: fs.readFileSync(`${__dirname}/../server.key`),
   cert: fs.readFileSync(`${__dirname}/../server.crt`),
