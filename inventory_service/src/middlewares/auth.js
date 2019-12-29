@@ -24,7 +24,7 @@ export default async function auth({ SIGN_KEY }, req, resp, next) {
       return resp.json({ message: 'GROUP_NOT_FOUND' });
     }
 
-    if (typeof group.name !== 'string' && group.name !== req.params.groupname) {
+    if (!group || typeof group.name !== 'string' && group.name !== req.params.groupname) {
       return resp.status(401).json({ message: 'NOT_AUTHORIZED' });
     }
 

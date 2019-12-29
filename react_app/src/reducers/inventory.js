@@ -12,14 +12,21 @@ export default function inventory(state = {
     case 'INVENTORY_LOADED':
       return { status: action.type, items: action.items };
 
+    case 'ITEM_CREATED':
+      if (!state.items.allIds.some((id) => id === action.item._id)) {
+        state.items.allIds.push(action.item._id);
+      }
+      // fallthrough
     case 'ITEM_UPDATED':
-      if (action.item._id in state.items.byId) {
+      if (state.items.allIds.some((id) => id === action.item._id)) {
         newState.items.byId[action.item._id] = action.item;
-        newState.items.allIds = state.items.allIds.sort((i1, i2) => {
+        /*       newState.items.allIds = state.items.allIds.sort((i1, i2) => {
           const a = new Date(newState.items.byId[i1].updatedAt);
           const b = new Date(newState.items.byId[i2].updatedAt);
           return a.getTime() - b.getTime();
         });
+        PASSAR PARA COMPONENTE
+        */
         return newState;
       }
       return state;

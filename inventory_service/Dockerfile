@@ -1,6 +1,8 @@
 FROM node:10
 
 ADD . /app
+
+COPY package.json /app
 WORKDIR /app
 
 EXPOSE 8000

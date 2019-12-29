@@ -6,12 +6,14 @@ services:
         env_file:
             - service.env
         ports: 
-            - "8000:8000"
+            - "8000:443"
         volumes:
             - ./inventory_service/:/app
             - /app/node_modules
         links:
             - mongodb
+        depends_on:
+            - mongodb 
     mongodb:
         container_name: mongodb
         build: ./db

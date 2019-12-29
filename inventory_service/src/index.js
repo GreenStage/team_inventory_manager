@@ -3,17 +3,14 @@ import logger from 'morgan';
 import cors from 'cors';
 import spdy from 'spdy';
 import fs from 'fs';
-import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import routes from './routes';
 
-const PORT = 8000;
-
 const options = {
-  PORT: process.env.PORT || 8000,
+  PORT: process.env.PORT || 443,
   SIGN_KEY: process.env.SIGN_KEY || 'SHOULD_DEFINE_ENV_SIGN_KEY',
   SESSION_KEEP_ALIVE: process.env.SESSION_KEEP_ALIVE || '10d',
-  MONGO_URL: process.env.MONGO_URL || 'SHOULD_DEFINE_ENV_MONGO_URL',
+  MONGO_URL: process.env.MONGODB_URI || 'SHOULD_DEFINE_ENV_MONGO_URL',
   key: fs.readFileSync(`${__dirname}/../server.key`),
   cert: fs.readFileSync(`${__dirname}/../server.crt`),
 };
@@ -22,7 +19,6 @@ mongoose.connect(options.MONGO_URL)
   .then(() => {
     const app = express();
     app.use(logger('dev'));
-    app.use(bodyParser.json());
     app.use(cors());
     app.disable('x-powered-by');
     app.enable('trust proxy');
@@ -30,6 +26,11 @@ mongoose.connect(options.MONGO_URL)
 
     app.get('/ping', (req, res) => {
       res.send('pong');
+    });
+
+    //CERTBOT
+    app.get('/.well-known/acme-challenge/bVQhldkrecero5pd_qHFNPwOZJsIXXziATho1fpgEo8', function(req, res) {
+      res.send('bVQhldkrecero5pd_qHFNPwOZJsIXXziATho1fpgEo8.YvKC4wazkGmcoWAvAeiLO9wd8YEUnkjd_6JWzhswkMs')
     });
 
     app.use((err, req, resp, next) => {
@@ -41,11 +42,11 @@ mongoose.connect(options.MONGO_URL)
     });
 
     spdy.createServer(options, app)
-      .listen(PORT, (err) => {
+      .listen(options.PORT, (err) => {
         if (err) {
           console.log(err);
         } else {
-          console.log(`Listening on port: ${PORT}.`);
+          console.log(`Listening on port: ${options.PORT}.`);
         }
       });
   }).catch((err) => console.log(err));

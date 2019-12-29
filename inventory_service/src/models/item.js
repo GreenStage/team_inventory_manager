@@ -12,12 +12,12 @@ const schema = new Schema({
   },
   amount: Number,
   storedAt: [{
-    where: { type: Schema.ObjectId, ref: 'Location' },
+    where: { type: Schema.ObjectId, ref: 'Location',
+    required: true, },
     amount: Number,
   }],
   picurl: {
     type: String,
-    default: 'default_group_pic.png',
   },
   group: {
     type: Schema.Types.ObjectId,

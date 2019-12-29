@@ -29,12 +29,12 @@ function getItemThumbnail(itemname, picurl) {
       style={{ width: '100%', height: '100%' }}
       variant="square"
       alt={itemname}
-      src={PIC_ENDOINT(picurl)}
+      src={picurl}
     />
   );
 }
 
-export default function Item({
+function Item({
   item, amount, hover, active, onClick,
 }) {
   let arrowClass = 'arrow';
@@ -102,10 +102,14 @@ Item.propTypes = {
   amount: PropTypes.number,
   hover: PropTypes.bool,
   onClick: PropTypes.func,
+  active: PropTypes.bool,
 };
 
 Item.defaultProps = {
   amount: 0,
   hover: false,
   onClick: () => {},
+  active: false,
 };
+
+export default React.memo(Item);

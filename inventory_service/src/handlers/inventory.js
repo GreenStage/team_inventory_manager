@@ -40,46 +40,55 @@ export async function createItem(config, req, resp) {
     return resp.json({ message: 'ERR_SAVE_ITEM' });
   }
 
-  return resp.json({ message: 'OK', item });
+  return resp.json({ message: 'OK', item, group: req.group });
 }
 
 export async function addItem(config, req, resp, next, remove = false) {
   let item = {};
 
-  if (typeof req.body._id !== 'string') return resp.json({ message: 'NO_ITEM_ID' });
-  if (typeof req.body.location !== 'string') return resp.json({ message: 'NO_LOCATION' });
+  if (typeof req.params.itemid !== 'string') return resp.json({ message: 'NO_ITEM_ID' });
   if (typeof req.body.amount !== 'number') return resp.json({ message: 'NO_AMOUNT' });
   if (req.body.amount < 0) return resp.json({ message: 'NEGATIVE_AMOUNT' });
+
   try {
-    item = await Item.findById(req.body._id);
+    item = await Item.findById(req.params.itemid);
   } catch (err) {
     return resp.json({ message: 'ERR_FIND_ITEM' });
   }
 
-  const locId = Types.ObjectId(req.body.location);
+  let addLocation = req.group.findLocation({_id: req.body.locationid, name: req.body.locationName})
 
-  let addLocation = item.storedAt.find((i) => i.where.equals(locId));
-  if (!addLocation){
-    const newlocation = req.group.locations.find((i) => i._id.equals(locId));
-    if(!newlocation){
-      return resp.json({ message: 'LOCATION_NOT_FOUND' });
+  if(!addLocation){
+    try{
+      await req.group.addLocation({name: req.body.locationName});
+    }catch(err){
+      return resp.json({ message: 'ERROR_CREATING_LOCATION' });
     }
-    addLocation = {where:newlocation._id, amount: 0};
-    const l = item.storedAt.push(addLocation);
-    addLocation = item.storedAt[l-1];
+    addLocation = req.group.findLocation({name: req.body.locationName});
   }
 
-  addLocation.amount += remove ? -req.body.amount : req.body.amount;
+  if(!addLocation){
+    return resp.json({ message: 'INVALID_LOCATION' });
+  }
 
-  if (addLocation.amount < 0) return resp.json({ message: 'INVALID_AMOUNT' });
-
+  let locationInItem = item.storedAt.find(l=>l.where.equals(addLocation._id));
+  if(!locationInItem){
+    item.storedAt.push({
+      where: addLocation._id,
+      amount: req.body.amount
+    });
+  }else{
+    locationInItem.amount += req.body.amount;
+  }
+  console.log(addLocation);
+  console.log(locationInItem)
   try {
     await item.save();
   } catch (err) {
     return resp.json({ message: 'ERR_SAVE_ITEM' });
   }
 
-  return resp.json({ message: 'OK', item });
+  return resp.json({ message: 'OK', item, location: addLocation });
 }
 
 export async function removeItem(config, req, resp, next) {

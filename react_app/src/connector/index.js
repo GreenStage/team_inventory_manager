@@ -1,5 +1,17 @@
 export * from './config';
 
+async function handleJsonResponse(resp) {
+  let json;
+  try {
+    json = await resp.json();
+  } catch (err) {
+    throw new Error(`HTTP_ERROR_${resp.status}`);
+  }
+  if (json.message !== 'OK') {
+    throw new Error(json.message);
+  }
+  return json;
+}
 export async function post(endpoint, body = {}, headers = {}) {
   const resp = await fetch(endpoint, {
     method: 'POST',
@@ -10,11 +22,7 @@ export async function post(endpoint, body = {}, headers = {}) {
     },
     body: JSON.stringify(body),
   });
-  const json = await resp.json();
-  if (json.message !== 'OK') {
-    throw new Error(json.message);
-  }
-  return json;
+  return handleJsonResponse(resp);
 }
 
 export async function get(endpoint, params = {}, headers = {}) {
@@ -30,9 +38,20 @@ export async function get(endpoint, params = {}, headers = {}) {
       ...headers,
     },
   });
-  const json = await resp.json();
-  if (json.message !== 'OK') {
-    throw new Error(json.message);
-  }
-  return json;
+  return handleJsonResponse(resp);
+}
+
+export async function upload(endpoint, body = {}, headers = {}) {
+  const fd = new FormData();
+  Object.keys(body).forEach((k) => {
+    fd.append(k, body[k]);
+  });
+  const resp = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      ...headers,
+    },
+    body: fd,
+  });
+  return handleJsonResponse(resp);
 }

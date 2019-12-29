@@ -5,7 +5,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import DefaultPage from './containers/defaultPage';
 import './App.scss';
 import { restoreSession } from './actions';
-import GroupWindow from './containers/groupWindow';
+import LoggedInPage from './containers/loggedInPage';
 
 const theme = createMuiTheme({
   palette: {
@@ -53,7 +53,7 @@ export default function App() {
 
   function decideRender() {
     switch (status) {
-      case 'SESSION_LOADED': return <GroupWindow />;
+      case 'SESSION_LOADED': return <LoggedInPage />;
       case 'IDLE':
         return <DefaultPage />;
       default:

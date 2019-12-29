@@ -41,3 +41,7 @@ export function searchInventory({ groupname, token }, search) {
 export function selectItem(item) {
   return { type: 'ITEM_SELECTED', item };
 }
+
+export function insertItem() {
+  return { type: 'INSERT_CLICK' };
+}

@@ -36,7 +36,7 @@ export function creategroup(params) {
 export function restoreSession({ groupname, token }) {
   return handleError(async (dispatch) => {
     dispatch(sessionLoading());
-    const resp = await server.get(server.GROUP_ENDPOINT(groupname), {}, {
+    const resp = await server.get(server.RESTORE_SESSION_ENDPOINT(groupname), {}, {
       Authorization: `Bearer ${token}`,
     });
     dispatch(sessionLoaded(resp));
@@ -45,3 +45,4 @@ export function restoreSession({ groupname, token }) {
 
 export * from './inventory';
 export * from './manageItem';
+export * from './location';

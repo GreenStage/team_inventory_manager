@@ -4,7 +4,7 @@ import { TextField, Button } from '@material-ui/core';
 
 const values = {};
 
-export default function EnterForm({ fields, submit, validated }) {
+function EnterForm({ fields, submit, validated }) {
   const fieldsJsx = fields.map((field) => (
     <TextField
       key={field.name}
@@ -25,7 +25,6 @@ export default function EnterForm({ fields, submit, validated }) {
   return (
     <form
       noValidate
-      validated={validated}
       onSubmit={(e) => submit.handle(e, values)}
     >
       {fieldsJsx}
@@ -55,3 +54,5 @@ EnterForm.propTypes = {
   }).isRequired,
   validated: PropTypes.bool.isRequired,
 };
+
+export default React.memo(EnterForm);

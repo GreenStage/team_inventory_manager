@@ -38,13 +38,15 @@ export async function newGroup({ SIGN_KEY, SESSION_KEEP_ALIVE }, req, resp) {
     u.password = '';
   });
 
+  const userId = group.users.find(u=> u.username === user.username)._id;
+
   return resp.json({
     message: 'OK',
     user,
     group,
     token: sign({
       groupid: group._id,
-      userid: user._id,
+      userid: userId,
     },
     SIGN_KEY,
     { expiresIn: SESSION_KEEP_ALIVE }),
