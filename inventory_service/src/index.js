@@ -1,10 +1,42 @@
-const express = require('express')
-const app = express()
-const port = process.env.PORT
+import express from 'express';
+import logger from 'morgan';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import routes from './routes';
 
-//CERTBOT
-app.get('/.well-known/acme-challenge/NUbwnLYxJxyMYFoXzVbGM_cR1RKIgTanhnZQMgf9pfY', function(req, res) {
-  res.send('NUbwnLYxJxyMYFoXzVbGM_cR1RKIgTanhnZQMgf9pfY.YvKC4wazkGmcoWAvAeiLO9wd8YEUnkjd_6JWzhswkMs')
-});
+const options = {
+  PORT: process.env.PORT || 443,
+  SIGN_KEY: process.env.SIGN_KEY || 'SHOULD_DEFINE_ENV_SIGN_KEY',
+  SESSION_KEEP_ALIVE: process.env.SESSION_KEEP_ALIVE || '10d',
+  MONGO_URL: process.env.MONGODB_URI || 'SHOULD_DEFINE_ENV_MONGO_URL',
+};
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+mongoose.connect(options.MONGO_URL)
+  .then(() => {
+    const app = express();
+    app.use(logger('dev'));
+    app.use(cors());
+    app.disable('x-powered-by');
+    app.enable('trust proxy');
+    app.use(routes(options));
+
+    app.get('/ping', (req, res) => {
+      res.send('pong');
+    });
+
+    app.use((err, req, resp, next) => {
+      console.log(err)
+      if (err.name === 'UnauthorizedError') {
+        return resp.status(401).json({ message: 'INVALID_TOKEN' });
+      }
+      return next();
+    });
+
+    app.listen(options.PORT, (err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(`Listening on port: ${options.PORT}.`);
+        }
+      });
+  }).catch((err) => console.log(err));
