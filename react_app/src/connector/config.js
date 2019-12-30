@@ -1,4 +1,4 @@
-const BASE_SERVER = 'https://localhost:8000';
+const BASE_SERVER = process.env.INVHOST;
 export const GROUP_ENDPOINT = (groupname) => `${BASE_SERVER}/group/${groupname}`;
 export const SIGNIN_ENDPOINT = `${BASE_SERVER}/enter/signin`;
 export const SIGNUP_ENDPOINT = `${BASE_SERVER}/enter/signup`;
