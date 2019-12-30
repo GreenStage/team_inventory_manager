@@ -1,52 +1,10 @@
-import express from 'express';
-import logger from 'morgan';
-import cors from 'cors';
-import spdy from 'spdy';
-import fs from 'fs';
-import mongoose from 'mongoose';
-import routes from './routes';
+const express = require('express')
+const app = express()
+const port = 80
 
-const options = {
-  PORT: process.env.PORT || 443,
-  SIGN_KEY: process.env.SIGN_KEY || 'SHOULD_DEFINE_ENV_SIGN_KEY',
-  SESSION_KEEP_ALIVE: process.env.SESSION_KEEP_ALIVE || '10d',
-  MONGO_URL: process.env.MONGODB_URI || 'SHOULD_DEFINE_ENV_MONGO_URL',
-  key: fs.readFileSync(`${__dirname}/../server.key`),
-  cert: fs.readFileSync(`${__dirname}/../server.crt`),
-};
+//CERTBOT
+app.get('/.well-known/acme-challenge/NUbwnLYxJxyMYFoXzVbGM_cR1RKIgTanhnZQMgf9pfY', function(req, res) {
+  res.send('NUbwnLYxJxyMYFoXzVbGM_cR1RKIgTanhnZQMgf9pfY.YvKC4wazkGmcoWAvAeiLO9wd8YEUnkjd_6JWzhswkMs')
+});
 
-mongoose.connect(options.MONGO_URL)
-  .then(() => {
-    const app = express();
-    app.use(logger('dev'));
-    app.use(cors());
-    app.disable('x-powered-by');
-    app.enable('trust proxy');
-    app.use(routes(options));
-
-    app.get('/ping', (req, res) => {
-      res.send('pong');
-    });
-
-    //CERTBOT
-    app.get('/.well-known/acme-challenge/NUbwnLYxJxyMYFoXzVbGM_cR1RKIgTanhnZQMgf9pfY', function(req, res) {
-      res.send('NUbwnLYxJxyMYFoXzVbGM_cR1RKIgTanhnZQMgf9pfY.YvKC4wazkGmcoWAvAeiLO9wd8YEUnkjd_6JWzhswkMs')
-    });
-
-    app.use((err, req, resp, next) => {
-      console.log(err)
-      if (err.name === 'UnauthorizedError') {
-        return resp.status(401).json({ message: 'INVALID_TOKEN' });
-      }
-      return next();
-    });
-
-    spdy.createServer(options, app)
-      .listen(options.PORT, (err) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log(`Listening on port: ${options.PORT}.`);
-        }
-      });
-  }).catch((err) => console.log(err));
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
