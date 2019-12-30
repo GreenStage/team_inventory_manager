@@ -1,4 +1,4 @@
-const BASE_SERVER = process.env.INVHOST;
+const BASE_SERVER = process.env.INVHOST || "https://invmanager.herokuapp.com";
 export const GROUP_ENDPOINT = (groupname) => `${BASE_SERVER}/group/${groupname}`;
 export const SIGNIN_ENDPOINT = `${BASE_SERVER}/enter/signin`;
 export const SIGNUP_ENDPOINT = `${BASE_SERVER}/enter/signup`;
