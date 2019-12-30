@@ -14,5 +14,6 @@ export default function routes(config) {
   
   router.use('/enter/',enterRoutes(config));
   router.use('/',staticRoute(config));
+
   return router;
 }

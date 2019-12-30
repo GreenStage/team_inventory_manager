@@ -29,8 +29,8 @@ mongoose.connect(options.MONGO_URL)
     });
 
     //CERTBOT
-    app.get('/.well-known/acme-challenge/bVQhldkrecero5pd_qHFNPwOZJsIXXziATho1fpgEo8', function(req, res) {
-      res.send('bVQhldkrecero5pd_qHFNPwOZJsIXXziATho1fpgEo8.YvKC4wazkGmcoWAvAeiLO9wd8YEUnkjd_6JWzhswkMs')
+    app.get('/.well-known/acme-challenge/NUbwnLYxJxyMYFoXzVbGM_cR1RKIgTanhnZQMgf9pfY', function(req, res) {
+      res.send('NUbwnLYxJxyMYFoXzVbGM_cR1RKIgTanhnZQMgf9pfY.YvKC4wazkGmcoWAvAeiLO9wd8YEUnkjd_6JWzhswkMs')
     });
 
     app.use((err, req, resp, next) => {
