@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 80
+const port = process.env.PORT
 
 //CERTBOT
 app.get('/.well-known/acme-challenge/NUbwnLYxJxyMYFoXzVbGM_cR1RKIgTanhnZQMgf9pfY', function(req, res) {
