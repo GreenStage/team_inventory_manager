@@ -16,7 +16,7 @@ function AddItem({
   setAmount,
 }) {
   return (
-    <Box style={{padding:".4em"}}>
+    <Box style={{overflow:"hidden",height:"100%",paddingLeft:"0.5em"}}>
       <form onSubmit={(e) => onSubmit(e)}>
         <Grid container justify="flex-start" alignItems="flex-start" spacing={1}>
           <Grid item xs={12} sm={6}>
@@ -48,8 +48,8 @@ function AddItem({
               type="number"
             />
           </Grid>
-          <Grid item xs={12} sm={2} style={{ height: '100%', paddingTop: '1em' }}>
-            <Button variant="contained" type="submit">
+          <Grid item xs={12} sm={2} style={{ height: '100%', paddingTop: '1em',float:"right"}}>
+            <Button variant="contained" type="submit" style={{float:"right"}}>
               Add
             </Button>
           </Grid>

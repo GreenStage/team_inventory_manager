@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 import routes from './routes';
 
 const options = {
-  PORT: process.env.PORT || 443,
+  PORT: process.env.PORT || 8000,
   SIGN_KEY: process.env.SIGN_KEY || 'SHOULD_DEFINE_ENV_SIGN_KEY',
   SESSION_KEEP_ALIVE: process.env.SESSION_KEEP_ALIVE || '10d',
   MONGO_URL: process.env.MONGODB_URI || 'SHOULD_DEFINE_ENV_MONGO_URL',

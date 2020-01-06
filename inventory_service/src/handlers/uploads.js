@@ -9,6 +9,7 @@ export async function uploadPic(config,req,resp,next){
     const result = await cloudinary.uploader.upload(req.files.file.path);
     return resp.json({message:'OK',url:result.url});
   }catch(err){
+    console.log(err);
     return resp.json({message:"UPLOAD_FAILED"})
   }
 }

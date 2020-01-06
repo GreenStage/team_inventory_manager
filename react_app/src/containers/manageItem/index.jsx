@@ -63,7 +63,7 @@ export default function ManageItem() {
       <SwipeableViews
         axis="x-reverse"
         index={selectedTab}
-        containerStyle={{ height: 100 }}
+        containerStyle={{height:"5em"}}
         onChangeIndex={selectedTab}
       >
         <AddItem item={item} locations={locations} />
