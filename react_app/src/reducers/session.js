@@ -1,11 +1,10 @@
-const localSessionJson = localStorage.getItem('session');
-let localSession = {};
 
-if (localSession) {
-  localSession = JSON.parse(localSessionJson);
-}
+const localSession = () => {
+  const localSessionJson = localStorage.getItem('session');
+  return localSessionJson ? JSON.parse(localSessionJson) : {};
+};
 
-export default function session(state = localSession, action) {
+export default function session(state = localSession(), action) {
   let sessionData = {};
   switch (action.type) {
     case 'SESSION_LOADED':
@@ -15,6 +14,9 @@ export default function session(state = localSession, action) {
       };
       localStorage.setItem('session', JSON.stringify(sessionData));
       return sessionData;
+    case 'SIGN_OUT':
+      localStorage.removeItem('session');
+      return {};
     default:
       return state;
   }

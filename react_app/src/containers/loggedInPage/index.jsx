@@ -1,7 +1,7 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
-  Container, AppBar, Toolbar, Typography, Avatar, Grid, Divider,
+  Container, AppBar, Toolbar, Typography, Avatar, Grid, Divider, Button,
 } from '@material-ui/core';
 
 import { makeStyles } from '@material-ui/styles';
@@ -9,6 +9,7 @@ import { PIC_ENDOINT } from '../../connector';
 import Inventory from '../inventory';
 import ManageItem from '../manageItem';
 import CreateItem from '../createitem/createItem';
+import { signout } from '../../actions';
 
 const defaultPicUrl = 'default_group_pic.png';
 
@@ -31,6 +32,7 @@ export default function LoggedInPage() {
   const user = useSelector((state) => state.user);
   const group = useSelector((state) => state.group);
   const session = useSelector((state) => state.session);
+  const dispatch = useDispatch();
   const selectedPaneType = useSelector((state) => state.selectedPane.type);
   const classes = useStyles({ hassecondpane: !!selectedPaneType });
   let avatar;
@@ -41,8 +43,8 @@ export default function LoggedInPage() {
     avatar = <Avatar edge="start">{user.username.charAt(0).toUpperCase()}</Avatar>;
   }
 
+  
   function choseSecondPane() {
-    console.log(selectedPaneType)
     switch (selectedPaneType) {
       case 'ITEM_MANAGE':
         return <ManageItem />;
@@ -55,18 +57,21 @@ export default function LoggedInPage() {
 
   return (
     <Container maxWidth={false} style={{ paddingTop: '5em', height: '100%' }}>
-      <AppBar position="absolute">
+      <AppBar position="fixed">
         <Toolbar>
           {avatar}
           <Typography variant="h6" style={{ paddingLeft: '1em' }}>
             {user.username}
           </Typography>
-          <Typography variant="h6" style={{ paddingLeft: '0.1em' }}>
+          <Typography variant="h6" style={{ paddingLeft: '0.1em', }}>
             @
           </Typography>
-          <Typography variant="h6" style={{ paddingLeft: '0.1em' }} color="textSecondary">
+          <Typography variant="h6" style={{ paddingLeft: '0.1em', flex:"1" }} color="textSecondary">
             {group.name}
           </Typography>
+          <Button style={{color:"#FFFFFF"}} onClick={()=>dispatch(signout())}>
+            Sign out
+          </Button>
         </Toolbar>
       </AppBar>
       <Grid container alignItems="flex-start" justify="center" style={{ height: '100%' }}>

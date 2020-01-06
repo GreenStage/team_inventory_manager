@@ -9,6 +9,11 @@ function sessionLoaded(serverResponse) {
   return { type: 'SESSION_LOADED', data: serverResponse || {} };
 }
 
+
+export function signout() {
+  return { type: 'SIGN_OUT' };
+}
+
 export function signin(params) {
   return handleError(async (dispatch) => {
     dispatch(sessionLoading());

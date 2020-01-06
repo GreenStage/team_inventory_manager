@@ -4,15 +4,12 @@ import {
   Typography,
   TextField,
   Button,
-  Fab,
   CircularProgress,
   Grid,
   Avatar,
   Hidden,
-  Paper,
+  Box,
 } from '@material-ui/core';
-import CheckIcon from '@material-ui/icons/Check';
-import CloudUpload from '@material-ui/icons/CloudUpload';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 import { green } from '@material-ui/core/colors';
@@ -62,11 +59,9 @@ export default function CreateItem() {
   const uploadPicName = 'create_item_pic';
   const uploadInput = useRef(null);
   const session = useSelector((state) => state.session);
-  const picUpload = useSelector((state) => state.uploads[uploadPicName]);
+  const loading = useSelector((state) => state.loading['ITEM_CREATE']);
   const [picPreview, setPicPreview] = useState(null);
   const dispatch = useDispatch();
-  const success = !!((picUpload && picUpload.status === 'UPLOADED'));
-  const loading = !!((picUpload && picUpload.status === 'UPLOADING'));
   const classes = useStyles();
 
   function setItemName(name) {
@@ -84,37 +79,16 @@ export default function CreateItem() {
     const file = uploadInput.current.files[0];
     setPicPreview(URL.createObjectURL(file));
   }
-
+  if(loading) alert("loading")
   return (
     <Container>
       <Typography variant="h4" style={{ paddingTop: '0.3em', paddingBottom: '1em' }}>
         Create Item
       </Typography>
 
-      <Paper style={{ padding: '0.8em' }}>
+      <Box style={{ paddingTop: '0.8em' }}>
         <form onSubmit={createItemH}>
-          <Grid container direction="row-reverse" justify="flex-end" alignItems="center">
-            <Grid item>
-              <Button type="submit" variant="contained" color="primary">
-                Submit
-              </Button>
-            </Grid>
-            <Hidden xsDown>
-              <Grid item sm={1} />
-            </Hidden>
-            <Grid item>
-              <TextField
-                id="itemname"
-                error={error.name}
-                helperText={error.warningName}
-                onChange={(e) => setItemName(e.target.value)}
-                label="Item name"
-                type="text"
-              />
-            </Grid>
-            <Hidden xsDown>
-              <Grid item sm={1} />
-            </Hidden>
+          <Grid container direction="row" justify="flex-start" alignItems="stretch" >
             <Grid item>
 
               <Avatar
@@ -122,10 +96,35 @@ export default function CreateItem() {
                 className={classes.thumbSize}
                 src={picPreview || ''}
               >
-          pic
+pic
               </Avatar>
               <Grid container justify="flex-start">
+
                 <Grid item>
+                  {loading && <CircularProgress size={68} className={classes.fabProgress} />}
+                </Grid>
+              </Grid>
+            </Grid>
+            <Hidden xsDown>
+              <Grid item sm={1} />
+            </Hidden>
+            <Grid item>
+              <Grid container direction="column" alignItems="flex-start" style={{height:"90%"}} justify="space-between">
+                <Grid item style={{ paddingLeft: '0', paddingTop: '0' }}>
+                  <TextField
+                    id="itemname"
+                    style={{ padding: '0' }}
+                    error={error.name}
+                    helperText={error.warningName}
+                    onChange={(e) => setItemName(e.target.value)}
+                    label="Item name"
+                    type="text"
+                  />
+                </Grid>
+                <Grid
+                  item
+                  style={{ paddingLeft: '0' }}
+                >
                   <input
                     ref={uploadInput}
                     name={uploadPicName}
@@ -138,19 +137,27 @@ export default function CreateItem() {
                   />
                   <label htmlFor="outlined-button-file">
 
-                    <Button variant="text" color="default" component="span" disabled={loading}>
-              Select
+                    <Button
+                      variant="text"
+                      color="default"
+                      component="span"
+                      disabled={loading}
+                      style={{ paddingLeft: '0' }}
+                    >
+                    Select image
                     </Button>
                   </label>
                 </Grid>
-                <Grid item>
-                  {loading && <CircularProgress size={68} className={classes.fabProgress} />}
-                </Grid>
+                <Button type="submit" variant="contained" color="primary">
+                  Submit
+                </Button>
               </Grid>
             </Grid>
+
+
           </Grid>
         </form>
-      </Paper>
+      </Box>
     </Container>
 
   );

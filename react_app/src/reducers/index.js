@@ -6,7 +6,7 @@ import session from './session';
 import error from './error';
 import inventory from './inventory';
 import selectedPane from './selectedPane';
-import uploads from './uploads';
+import loading from './loading';
 
 export default combineReducers({
   user,
@@ -16,5 +16,5 @@ export default combineReducers({
   error,
   inventory,
   selectedPane,
-  uploads
+  loading,
 });
