@@ -1,9 +1,6 @@
 import jwt from 'express-jwt';
 
-import {Group} from '../../../models';
-
-export default async function auth({ SIGN_KEY }, req, resp, next) {
-  console.log(req.headers.authorization)
+export default async function auth({ models, SIGN_KEY }, req, resp, next) {
   const jwtRequestH = jwt({
     secret: SIGN_KEY,
     requestProperty: 'token',
@@ -14,13 +11,13 @@ export default async function auth({ SIGN_KEY }, req, resp, next) {
       return null;
     },
   });
+  
   jwtRequestH(req,resp,(req, resp, async () => {
     let group = {};
 
     try {
-      group = await Group.findById(req.token.groupid);
+      group = await models.Group.findById(req.token.groupid);
     } catch (err) {
-      console.log(req.token);
       return resp.json({ message: 'GROUP_NOT_FOUND' });
     }
 
