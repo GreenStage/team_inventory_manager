@@ -1,10 +1,9 @@
 import { sign } from 'jsonwebtoken';
-import { Group } from '../models';
 
 const MIN_USERNAME = 4;
 const MIN_PASSWORD = 4;
 
-export async function signup({ SIGN_KEY, SESSION_KEEP_ALIVE }, req, resp) {
+export async function signup({ models, SIGN_KEY, SESSION_KEEP_ALIVE }, req, resp) {
   let group = {};
   let invite = {};
 
@@ -17,7 +16,7 @@ export async function signup({ SIGN_KEY, SESSION_KEEP_ALIVE }, req, resp) {
   if (typeof req.body.code !== 'string') return resp.json({ message: 'NO_CODE' });
 
   try {
-    group = await Group.findOne({ 'invite_codes.code': req.body.code });
+    group = await models.Group.findOne({ 'invite_codes.code': req.body.code });
     invite = group.invite_codes.find((iv) => iv.code.toString() === req.body.code);
   } catch (err) {
     return resp.status(400).json({ message: 'CODE_NOT_FOUND' });
@@ -65,11 +64,11 @@ export async function signup({ SIGN_KEY, SESSION_KEEP_ALIVE }, req, resp) {
 }
 
 
-export async function signin({ SIGN_KEY, SESSION_KEEP_ALIVE }, req, resp) {
+export async function signin({ models, SIGN_KEY, SESSION_KEEP_ALIVE }, req, resp) {
   let group = {}; let user = {};
 
   try {
-    group = await Group.findOne({ name: req.body.groupname });
+    group = await models.Group.findOne({ name: req.body.groupname });
   } catch (err) {
     return resp.status(400).json({ message: 'GROUP_NOT_FOUND' });
   }

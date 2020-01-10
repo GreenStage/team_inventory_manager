@@ -52,5 +52,12 @@ schema.methods.addLocation = async function addLocation(loc){
   });
 }
 
+schema.methods.createCode = function(expireAt){
+  return{
+    code: Schema.Types.ObjectId(),
+    expiresAt: expireAt,
+  };
+}
+
 exports.GroupSchema = schema;
 export default model('Group', schema);

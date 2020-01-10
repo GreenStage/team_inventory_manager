@@ -1,12 +1,10 @@
 import {sign} from 'jsonwebtoken';
-import { Types } from 'mongoose';
-import { Group } from '../models';
 
 const MIN_USERNAME = 4;
 const MIN_PASSWORD = 4;
 const MIN_GROUPNAME = 4;
 
-export async function newGroup({ SIGN_KEY, SESSION_KEEP_ALIVE }, req, resp) {
+export async function newGroup({ models, SIGN_KEY, SESSION_KEEP_ALIVE }, req, resp) {
   if (typeof req.body.groupname !== 'string') return resp.json({ message: 'NO_GROUPNAME' });
   if (req.body.groupname.length < MIN_GROUPNAME) return resp.json({ message: 'GROUPNAME_TOO_SHORT' });
 
@@ -21,7 +19,7 @@ export async function newGroup({ SIGN_KEY, SESSION_KEEP_ALIVE }, req, resp) {
     password: req.body.password,
   };
 
-  const group = new Group({
+  const group = new models.Group({
     name: req.body.groupname,
     users: [user],
   });
@@ -57,11 +55,7 @@ export async function createGroupCode(config, req, resp) {
   const expireAt = new Date();
   expireAt.setTime(expireAt.getTime() + 15 * 86400000);
 
-  const groupCode = {
-    code: Types.ObjectId(),
-    expiresAt: expireAt,
-  };
-
+  const groupCode = req.group.createCode();
   req.group.invite_codes.push(groupCode);
 
   try {

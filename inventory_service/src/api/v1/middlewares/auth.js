@@ -1,6 +1,6 @@
 import jwt from 'express-jwt';
 
-import {Group} from '../models';
+import {Group} from '../../../models';
 
 export default async function auth({ SIGN_KEY }, req, resp, next) {
   console.log(req.headers.authorization)
